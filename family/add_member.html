@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加家庭成员 - 家庭回忆录</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/nav.css">
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f5f5f5;
+            --text-color: #333;
+            --border-color: #ddd;
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--secondary-color);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .avatar-upload {
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .avatar-upload:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(74, 144, 226, 0.05);
+        }
+
+        .avatar-upload i {
+            font-size: 3em;
+            color: #aaa;
+            margin-bottom: 15px;
+        }
+
+        .avatar-upload p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .avatar-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            display: none;
+            border: 3px solid var(--primary-color);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #357abd;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            margin-top: 5px;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--danger-color);
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 20px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <i class="fas fa-home"></i>
+                家庭回忆录
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">首页</a>
+                <a href="list.html" class="nav-link">内容列表</a>
+                <a href="members.html" class="nav-link">家庭成员</a>
+                <a href="add.html" class="nav-link">添加内容</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>添加家庭成员</h1>
+            <p>记录家人的信息</p>
+        </div>
+
+        <div class="form-container">
+            <form id="add-member-form" onsubmit="return handleSubmit(event)">
+                <div class="form-group">
+                    <label for="name" class="required">姓名</label>
+                    <input type="text" id="name" name="name" class="form-control" required>
+                    <div id="name-error" class="error-message">请输入姓名</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="role" class="required">角色</label>
+                    <input type="text" id="role" name="role" class="form-control" required>
+                    <div id="role-error" class="error-message">请输入角色</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="birthday" class="required">生日</label>
+                    <input type="date" id="birthday" name="birthday" class="form-control" required>
+                    <div id="birthday-error" class="error-message">请选择生日</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">描述</label>
+                    <textarea id="description" name="description" class="form-control"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>头像</label>
+                    <div class="avatar-upload" id="avatar-upload">
+                        <img id="avatar-preview" class="avatar-preview" src="#" alt="头像预览">
+                        <i class="fas fa-user-circle"></i>
+                        <p>点击或拖拽图片到此处上传</p>
+                        <p style="font-size: 0.8em; color: #999;">支持 JPG、PNG 格式</p>
+                    </div>
+                    <input type="file" id="avatar" name="avatar" accept="image/*" style="display: none;">
+                    <div id="avatar-error" class="error-message">请上传头像</div>
+                </div>
+
+                <div class="form-actions">
+                    <a href="members.html" class="btn btn-secondary">取消</a>
+                    <button type="submit" class="btn">添加成员</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 头像上传预览
+        const avatarUpload = document.getElementById('avatar-upload');
+        const avatarInput = document.getElementById('avatar');
+        const avatarPreview = document.getElementById('avatar-preview');
+
+        avatarUpload.addEventListener('click', () => {
+            avatarInput.click();
+        });
+
+        avatarInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    avatarPreview.src = e.target.result;
+                    avatarPreview.style.display = 'block';
+                }
+                
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        // 拖拽上传
+        avatarUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            avatarUpload.style.borderColor = '#4a90e2';
+            avatarUpload.style.backgroundColor = 'rgba(74, 144, 226, 0.05)';
+        });
+
+        avatarUpload.addEventListener('dragleave', () => {
+            avatarUpload.style.borderColor = '';
+            avatarUpload.style.backgroundColor = '';
+        });
+
+        avatarUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            avatarUpload.style.borderColor = '';
+            avatarUpload.style.backgroundColor = '';
+            
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                avatarInput.files = e.dataTransfer.files;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    avatarPreview.src = e.target.result;
+                    avatarPreview.style.display = 'block';
+                }
+                reader.readAsDataURL(e.dataTransfer.files[0]);
+            }
+        });
+
+        // 表单提交处理
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            // 在实际应用中，这里应该发送表单数据到服务器
+            // 这里我们只是模拟成功并重定向
+            alert('在静态版本中，添加功能不可用，需要服务器支持。');
+            window.location.href = 'members.html?success=true';
+            
+            return false;
+        }
+    </script>
+</body>
+</html> 

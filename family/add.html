@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加内容 - 家庭回忆录</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --text-color: #333;
+            --bg-color: #f5f5f5;
+            --card-bg: #fff;
+            --border-color: #ddd;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .form-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .photo-upload {
+            border: 2px dashed var(--border-color);
+            padding: 20px;
+            text-align: center;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .photo-upload:hover {
+            border-color: var(--primary-color);
+        }
+
+        .photo-upload input[type="file"] {
+            display: none;
+        }
+
+        .photo-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .photo-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 24px;
+            height: 24px;
+            background-color: rgba(220, 53, 69, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .photo-remove:hover {
+            background-color: rgba(220, 53, 69, 1);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #357abd;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .form-card {
+                padding: 20px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>添加内容</h1>
+        </div>
+
+        <div class="form-card">
+            <form action="save.php" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="form-label" for="contentType">内容类型</label>
+                    <select id="contentType" name="contentType" class="form-control" required>
+                        <option value="photo">照片</option>
+                        <option value="message">消息</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="title">标题</label>
+                    <input type="text" id="title" name="title" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="date">日期</label>
+                    <input type="datetime-local" id="date" name="date" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="description">描述</label>
+                    <textarea id="description" name="description" class="form-control" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="sender">发送者</label>
+                    <input type="text" id="sender" name="sender" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">照片</label>
+                    <div class="photo-upload" onclick="document.getElementById('photos').click()">
+                        <input type="file" id="photos" name="photos[]" multiple accept="image/*" class="form-control">
+                        <p>点击或拖拽照片到此处上传</p>
+                        <small>支持 JPG、JPEG、PNG、GIF 格式，可一次上传多张</small>
+                    </div>
+                    <div class="photo-preview" id="photoPreview"></div>
+                </div>
+
+                <div class="form-actions">
+                    <a href="list.php" class="btn btn-secondary">取消</a>
+                    <button type="submit" class="btn">保存</button>
+                </div>
+            </form>
+        </div>
+
+        <a href="list.php" class="back-link">返回列表</a>
+    </div>
+
+    <script>
+        // 设置默认日期为当前时间
+        document.getElementById('date').value = new Date().toISOString().slice(0, 16);
+
+        // 处理照片上传和预览
+        const photoInput = document.getElementById('photos');
+        const photoPreview = document.getElementById('photoPreview');
+        const uploadedPhotos = new Set();
+
+        photoInput.addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            
+            files.forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const photoItem = document.createElement('div');
+                        photoItem.className = 'photo-item';
+                        photoItem.innerHTML = `
+                            <img src="${e.target.result}" alt="预览图片">
+                            <button type="button" class="photo-remove" onclick="removePhoto(this)">&times;</button>
+                        `;
+                        photoPreview.appendChild(photoItem);
+                        uploadedPhotos.add(file);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+
+        // 移除照片
+        function removePhoto(button) {
+            const photoItem = button.parentElement;
+            const img = photoItem.querySelector('img');
+            const index = Array.from(photoPreview.children).indexOf(photoItem);
+            
+            // 从 FileList 中移除对应的文件
+            const dt = new DataTransfer();
+            const files = photoInput.files;
+            for (let i = 0; i < files.length; i++) {
+                if (i !== index) {
+                    dt.items.add(files[i]);
+                }
+            }
+            photoInput.files = dt.files;
+            
+            photoItem.remove();
+        }
+
+        // 拖拽上传
+        const photoUpload = document.querySelector('.photo-upload');
+
+        photoUpload.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.borderColor = 'var(--primary-color)';
+        });
+
+        photoUpload.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.style.borderColor = 'var(--border-color)';
+        });
+
+        photoUpload.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.borderColor = 'var(--border-color)';
+            
+            const files = Array.from(e.dataTransfer.files);
+            const imageFiles = files.filter(file => file.type.startsWith('image/'));
+            
+            if (imageFiles.length > 0) {
+                const dt = new DataTransfer();
+                const currentFiles = photoInput.files;
+                for (let i = 0; i < currentFiles.length; i++) {
+                    dt.items.add(currentFiles[i]);
+                }
+                imageFiles.forEach(file => dt.items.add(file));
+                photoInput.files = dt.files;
+                
+                // 触发 change 事件以显示预览
+                photoInput.dispatchEvent(new Event('change'));
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,34 @@
+[
+    {
+        "id": "1",
+        "name": "朱娱岑",
+        "role": "baby",
+        "birthday": "2005-12-23",
+        "description": "家里的顶梁柱，工作认真负责，对家人充满爱心。",
+        "avatar": "67f7d65c8f471.jpg"
+    },
+    {
+        "id": "2",
+        "name": "妈妈",
+        "role": "母亲",
+        "birthday": "1972-02-02",
+        "description": "温柔贤惠，把家里打理得井井有条，是全家人的温暖港湾。",
+        "avatar": "mom.jpg"
+    },
+    {
+        "id": 3,
+        "name": "张小明",
+        "role": "儿子",
+        "birthday": "1995-03-03",
+        "description": "活泼开朗，喜欢音乐和绘画。",
+        "photo": "uploads\/members\/son.jpg"
+    },
+    {
+        "id": 4,
+        "name": "张小红",
+        "role": "女儿",
+        "birthday": "1998-04-04",
+        "description": "聪明伶俐，热爱阅读和写作。",
+        "photo": "uploads\/members\/daughter.jpg"
+    }
+]

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查看内容 - 家庭回忆录</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/nav.css">
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f5f5f5;
+            --text-color: #333;
+            --border-color: #ddd;
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--secondary-color);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .image-gallery {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .image-gallery img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: #f8f8f8;
+        }
+
+        .image-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: 15px;
+            cursor: pointer;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.2em;
+            transition: background-color 0.3s;
+        }
+
+        .image-nav:hover {
+            background: rgba(0,0,0,0.7);
+        }
+
+        .image-nav.prev {
+            left: 20px;
+        }
+
+        .image-nav.next {
+            right: 20px;
+        }
+
+        .image-counter {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .content-info {
+            padding: 30px;
+        }
+
+        .content-date {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .content-title {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .content-description {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+
+        .content-sender {
+            color: #666;
+            font-size: 1em;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .content-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #357abd;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .empty-state h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .empty-state p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+        }
+
+        .empty-state i {
+            font-size: 3em;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .image-gallery {
+                height: 300px;
+            }
+
+            .content-info {
+                padding: 20px;
+            }
+
+            .content-title {
+                font-size: 1.5em;
+            }
+
+            .content-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <i class="fas fa-home"></i>
+                家庭回忆录
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">首页</a>
+                <a href="list.html" class="nav-link">内容列表</a>
+                <a href="members.html" class="nav-link">家庭成员</a>
+                <a href="add.html" class="nav-link">添加内容</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>查看内容</h1>
+            <p>家庭回忆详情</p>
+        </div>
+
+        <div id="content-container">
+            <!-- 内容将通过JavaScript动态加载 -->
+        </div>
+    </div>
+
+    <script>
+        // 模拟数据 - 在实际应用中，这些数据应该从服务器获取
+        const contents = [
+            {
+                "id": "67f7d5be47ff7",
+                "type": "message",
+                "title": "【天呐！猪屁股居然做出这种事】",
+                "date": "2025-04-10T14:27",
+                "description": "猪屁股搞了一个家庭回忆录！请大家尽情享用！！！",
+                "sender": "小猪",
+                "images": [
+                    "67f7d5be47e45.jpg"
+                ]
+            }
+        ];
+
+        // 获取URL参数
+        function getUrlParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // 显示内容详情
+        function displayContent() {
+            const contentContainer = document.getElementById('content-container');
+            const contentId = getUrlParam('id');
+            
+            if (!contentId) {
+                contentContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <h2>内容不存在</h2>
+                        <p>无法找到您请求的内容</p>
+                        <a href="list.html" class="btn">返回列表</a>
+                    </div>
+                `;
+                return;
+            }
+
+            // 在实际应用中，这里应该根据ID从服务器获取内容
+            // 这里我们只是从模拟数据中查找
+            const content = contents.find(item => item.id === contentId);
+            
+            if (!content) {
+                contentContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <h2>内容不存在</h2>
+                        <p>无法找到您请求的内容</p>
+                        <a href="list.html" class="btn">返回列表</a>
+                    </div>
+                `;
+                return;
+            }
+
+            let contentHTML = `
+                <div class="content-card">
+                    <div class="image-gallery">
+                        ${content.images && content.images.length > 0 
+                            ? `<img src="uploads/${content.images[0]}" alt="${content.title}">
+                               ${content.images.length > 1 
+                                   ? `<button class="image-nav prev" onclick="showPrevImage(this)">❮</button>
+                                      <button class="image-nav next" onclick="showNextImage(this)">❯</button>
+                                      <div class="image-counter">1/${content.images.length}</div>`
+                                   : ''}`
+                            : '<img src="images/placeholder.jpg" alt="暂无图片">'}
+                    </div>
+                    <div class="content-info">
+                        <div class="content-date">${content.date}</div>
+                        <h2 class="content-title">${content.title}</h2>
+                        <p class="content-description">${content.description}</p>
+                        <div class="content-sender">发送者：${content.sender}</div>
+                        <div class="content-actions">
+                            <a href="list.html" class="btn btn-secondary">返回列表</a>
+                            <a href="edit_content.html?id=${content.id}" class="btn">编辑</a>
+                            <a href="javascript:void(0)" class="btn btn-danger" onclick="deleteContent('${content.id}')">删除</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            contentContainer.innerHTML = contentHTML;
+        }
+
+        // 图片导航功能
+        function showPrevImage(button) {
+            const gallery = button.parentElement;
+            const img = gallery.querySelector('img');
+            const counter = gallery.querySelector('.image-counter');
+            const currentIndex = parseInt(counter.textContent.split('/')[0]) - 1;
+            const contentId = getUrlParam('id');
+            const content = contents.find(item => item.id === contentId);
+            
+            if (currentIndex > 0) {
+                img.src = 'uploads/' + content.images[currentIndex - 1];
+                counter.textContent = `${currentIndex}/${content.images.length}`;
+            }
+        }
+
+        function showNextImage(button) {
+            const gallery = button.parentElement;
+            const img = gallery.querySelector('img');
+            const counter = gallery.querySelector('.image-counter');
+            const currentIndex = parseInt(counter.textContent.split('/')[0]) - 1;
+            const contentId = getUrlParam('id');
+            const content = contents.find(item => item.id === contentId);
+            
+            if (currentIndex < content.images.length - 1) {
+                img.src = 'uploads/' + content.images[currentIndex + 1];
+                counter.textContent = `${currentIndex + 2}/${content.images.length}`;
+            }
+        }
+
+        // 删除功能
+        function deleteContent(id) {
+            if (confirm('确定要删除这条内容吗？此操作不可恢复。')) {
+                // 在实际应用中，这里应该发送请求到服务器删除数据
+                alert('删除功能在静态版本中不可用，需要服务器支持。');
+                window.location.href = 'list.html';
+            }
+        }
+
+        // 页面加载时执行
+        window.onload = function() {
+            displayContent();
+        };
+    </script>
+</body>
+</html> 
